@@ -1,0 +1,3 @@
+github3
+python-taiga
+docopt
