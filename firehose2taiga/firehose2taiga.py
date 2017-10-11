@@ -272,14 +272,19 @@ class TaigaHook(Hook):
 
 def on_message(hooks):
     # TODO check if gerrit has rules on this
-    _filter = ('gerrit/(?P<project>[A-Za-z0-9-_]+)'
-               '/(?P<repo>[A-Za-z0-9-_]+)/(?P<event>[A-Za-z0-9-_]+)')
+    _filter = ('gerrit/(?P<project_repo>[A-Za-z0-9-_/]+)'
+               '/(?P<event>[A-Za-z0-9-_]+)$')
     filter = re.compile(_filter, re.I)
 
     def _on_message(client, userdata, msg):
         LOGGER.debug(msg.topic)
         if filter.match(msg.topic):
-            project, repo, event = filter.match(msg.topic).groups()
+            project_repo, event = filter.match(msg.topic).groups()
+            if '/' in project_repo:
+                project, repo = project_repo.split('/')
+            else:
+                project = project_repo
+                repo = project_repo
             try:
                 jmsg = json.loads(msg.payload)
             except:
@@ -319,7 +324,11 @@ def main():
 
     # Setup hooks
     hooks = {'software-factory': TaigaHook(project=args.project,
-                                           password=args.password)}
+                                           password=args.password),
+             'DLRN': TaigaHook(project=args.project,
+                               password=args.password),
+             'repoxplorer': TaigaHook(project=args.project,
+                                      password=args.password), }
 
     # Setup the MQTT client
     client = mqtt.Client()
