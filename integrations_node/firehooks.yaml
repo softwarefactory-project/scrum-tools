@@ -1,0 +1,7 @@
+---
+- hosts: integrations_node
+  roles:
+  - name: firehooks
+    role_action: install
+  - name: firehooks
+    role_action: setup

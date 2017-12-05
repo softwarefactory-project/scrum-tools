@@ -1,0 +1,12 @@
+---
+- name: Configure firehooks
+  template:
+    src: templates/default.yaml.j2
+    dest: /etc/firehooks/default.yaml
+    owner: firehooks
+
+- name: Start firehooks service
+  service:
+    name: firehooks.service
+    state: started
+    enabled: yes

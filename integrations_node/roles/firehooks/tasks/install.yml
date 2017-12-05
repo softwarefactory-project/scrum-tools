@@ -1,0 +1,45 @@
+---
+- name: Create a firehooks group
+  group:
+    name: firehooks
+    state: present
+
+- name: Create a firehooks user
+  user:
+    name: firehooks
+    shell: /bin/bash
+    group: firehooks
+
+- name: Fetch code from repository
+  git:
+    repo: 'https://softwarefactory-project.io/r/p/software-factory/firehooks.git'
+    dest: /srv/firehooks
+
+- name: Install python2-taiga
+  yum:
+    name: python2-taiga
+    state: present
+
+- name: Install pip dependencies
+  pip:
+    requirements: /srv/firehooks/requirements.txt
+- name: Create firehooks config directory
+  file:
+    path: '/etc/firehooks'
+    state: directory
+    mode: 0755
+    owner: firehooks
+
+- name: Install library
+  command: python setup.py develop
+  args:
+    chdir: /srv/firehooks
+
+- name: Create Unit file
+  copy:
+    src: /srv/firehooks/firehooks.service
+    dest: /lib/systemd/system/firehooks.service
+    mode: 0644
+    remote_src: yes
+  notify:
+    - reload systemctl

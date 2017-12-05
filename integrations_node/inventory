@@ -1,0 +1,3 @@
+[integrations_node]
+# change this as needed
+#192.168.240.7 ansible_become=true ansible_become_user=root taigaUser=sfbot0 taigaPassword=XXX taigaProject=morucci-software-factory

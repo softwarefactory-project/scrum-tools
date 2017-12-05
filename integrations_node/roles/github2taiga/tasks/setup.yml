@@ -1,0 +1,14 @@
+---
+- name: Configure github2taiga
+  template:
+    src: templates/github2taiga.conf.j2
+    dest: /srv/scrum-tools/github2taiga/github2taiga.conf
+    owner: github2taiga
+
+- name: set cron
+  cron:
+    name: "synchronize rdopkg github issues"
+    minute: "*/15"
+    hour: "*"
+    job: "cd /srv/scrum-tools/github2taiga/ && python github2taiga.py sync  > /tmp/sync.txt 2>&1"
+    user: github2taiga

@@ -1,0 +1,45 @@
+---
+- hosts: integrations_node
+  tasks:
+
+  - name: Set authorized key to allow rebound from install server
+    authorized_key:
+      user: centos
+      state: present
+      key: "{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"
+    ignore_errors: yes
+    validate_certs: no
+
+  - name: Add EPEL repository
+    yum_repository:
+      name: epel
+      description: EPEL YUM repo
+      baseurl: https://download.fedoraproject.org/pub/epel/$releasever/$basearch/
+
+  - name: install basic packages
+    yum:
+      name: "{{ item }}"
+      state: present
+      update_cache: yes
+    with_items:
+      - git
+      - git-review
+      - vim-enhanced
+      - tmux
+      - curl
+      - ansible
+      - python-virtualenv
+      - python-pip
+      - tree
+      - gcc
+      - python2-urllib3
+      - python2-pyOpenSSL
+      - python2-pyasn1
+
+  - name: Install sf-release master
+    yum:
+      name: "https://softwarefactory-project.io/repos/sf-release-master.rpm"
+      validate_certs: no
+
+- import_playbook: firehooks.yaml
+- import_playbook: github2taiga.yaml

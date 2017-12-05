@@ -1,0 +1,6 @@
+- hosts: integrations_node
+  roles:
+  - name: github2taiga
+    role_action: install
+  - name: github2taiga
+    role_action: setup

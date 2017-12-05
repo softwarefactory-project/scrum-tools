@@ -1,0 +1,15 @@
+logging:
+  level: DEBUG
+broker:
+  url: softwarefactory-project.io
+  port: 1883
+
+projects:
+{% for project in projects %}
+  - {{ project }}:
+      TaigaIO:
+        project: {{ taigaProject }}
+        auth:
+          user: {{ taigaUser }}
+          password: {{ taigaPassword }}
+{% endfor %}

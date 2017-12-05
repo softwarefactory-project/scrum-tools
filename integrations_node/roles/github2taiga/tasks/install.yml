@@ -1,0 +1,23 @@
+---
+- name: Create a github2taiga user
+  user:
+    name: github2taiga
+    shell: /bin/bash
+
+- name: Fetch code from repository
+  git:
+    repo: 'https://softwarefactory-project.io/r/p/software-factory/scrum-tools.git'
+    dest: /srv/scrum-tools
+
+- name: Install github3 wrapper
+  pip:
+    name: pygithub3
+
+- name: Install python2-taiga
+  yum:
+    name: python2-taiga
+    state: present
+
+- name: Install pip dependencies
+  pip:
+    name: docopt
