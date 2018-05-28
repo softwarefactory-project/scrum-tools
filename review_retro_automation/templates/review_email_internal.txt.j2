@@ -1,0 +1,27 @@
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+To: openstack-status@redhat.com
+from: REPLACE ME
+Subject: [SF DFG] Sprint {{sprint_id}} Review
+
+Hello,
+
+Here is a summary of what the team did from {{sprint_start|datetimeformat('%B %d')}} to {{sprint_end|datetimeformat('%B %d')}}.
+
+Sprint taskboard: https://tree.taiga.io/project/morucci-software-factory/taskboard/{{sprint_id}}
+{% for topic, entries in topics.items() %}
+
+Regarding {{topic}}:
+
+{% for entry in entries %}
+* {{entry['data']}}
+{% endfor %}
+{% endfor %}
+
+
+The meeting can be watched at {{bj_url|default('REPLACE ME')}}
+
+The Next public review will happen {{next_sprint_end|datetimeformat('%A, %B %d')}} 08:00 EST, feel free to join us on #sf-dfg on Red Hat's internal IRC server for the event's details.
+
+The SF team

@@ -1,0 +1,22 @@
+<body>
+{% for day, entries_table in days.items() %}
+<h2>{{day|datetimeformat('%A, %B %d')}}</h2>
+<table style="width:100%">
+  <tr>
+{% for header in entries_table['headers'] %}
+  <th style="font-weight: bold;">{{header}}</th>
+{% endfor %}
+  </tr>
+{% for row in entries_table['rows'] %}
+  <tr style="background-color: {{ loop.cycle('#efefef;', '#ffffff') }}">
+{% for entry in row %}
+    <td {% if entry.lower() == 'info' %}style="color: cyan"{% elif entry.lower() == 'action' %}style="color: green"{% elif entry.lower() in ['warn', 'help'] %}style="color: orange"{% elif entry.lower() == 'error' %}style="color: red"{% elif entry.lower() == 'critical' %}style="color: darkred"{% else %}{% endif %}>{{entry}}</td>
+{% endfor %}
+  </tr>
+{% endfor %}
+</table>
+<p>
+{% endfor %}
+<p>
+<br>The original pad can be found at {{saved_pad_url|default('REPLACE ME')}}</br>
+</body>

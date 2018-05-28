@@ -1,0 +1,25 @@
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+to: softwarefactory-dev@redhat.com
+from: REPLACE_ME
+subject: Sprint {{sprint_id}} Review
+
+Hello,
+
+Here is a summary of what the team did from {{sprint_start|datetimeformat('%B %d')}} to {{sprint_end|datetimeformat('%B %d')}}.
+
+Sprint taskboard: https://tree.taiga.io/project/morucci-software-factory/taskboard/{{sprint_id}}
+
+{% for topic, entries in topics.items() %}
+
+Regarding {{topic}}:
+
+{% for entry in entries %}
+{% if not entry['internal'] %}
+* {{entry['data']}}
+{% endif %}
+{% endfor %}
+{% endfor %}
+
+The SF team

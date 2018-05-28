@@ -1,0 +1,19 @@
+Sprint {{sprint_id}} summary
+############################
+
+:date: {{publish_date|datetimeformat}}
+:modified: {{publish_date|datetimeformat}}
+:category: blog
+:authors: The Software Factory Team
+
+Below are the tasks we worked on during our last sprint.
+{% for topic, entries in topics.items() %}
+
+Regarding {{topic}}:
+
+{% for entry in entries %}
+{% if not entry['internal'] %}
+* {{entry['data']}}
+{% endif %}
+{% endfor %}
+{% endfor %}

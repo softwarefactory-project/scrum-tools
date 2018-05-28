@@ -1,0 +1,28 @@
+<body>
+{% for topic in ['Previous Actions','Things that happened', 'Things that went well', 'Things that went bad', 'Discussed Improvements', 'Recap and Actions for Next Sprint', 'Technical Parking Lot'] %}
+{% set entries = topics[topic]%}
+  <h2>{{topic}}:</h2>
+  <p>
+  {% set indent = 1 %}
+  {% set ns = namespace(open=0) %}
+  <ul>
+    {% for entry in entries %}
+    {% if entry['indent'] > indent %}
+    <ul>
+    {% set ns.open = ns.open + 1 %}
+    {% elif entry['indent'] < indent %}
+    </ul>
+    {% set ns.open = ns.open - 1 %}
+    {% endif %}
+    {% set indent = entry['indent'] %}
+    <li>{{entry['data']}}</li>
+    {% endfor %}
+    {% for i in range(0, ns.open) %}
+    </ul>
+    {% endfor %}
+  </ul>
+
+{% endfor %}
+  <p>
+  <br>The original pad can be found at {{saved_pad_url|default('REPLACE ME')}}</br>
+</body>
