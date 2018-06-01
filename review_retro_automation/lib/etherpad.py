@@ -33,7 +33,7 @@ class PadParser(EPad):
 class ReviewPadParser(PadParser):
     TOPIC_RE = re.compile('(?P<full>Regarding (?P<topic>[^:]+)\s*\:?)',
                           re.I | re.U)
-    ENTRY_RE = re.compile('\s*\*\s*(?P<internal>\[internal\])?'
+    ENTRY_RE = re.compile('\s*[*-]\s*(?P<internal>\[internal\])?'
                           '\s*(?P<data>.+)', re.I | re.U)
 
     def parse(self):
@@ -54,7 +54,6 @@ class ReviewPadParser(PadParser):
                 topics[current_topic].append(entry)
         return topics
 
-
 class RetroPadParser(PadParser):
     TOPICS = ['Previous Actions',
               'Things that happened',
@@ -65,7 +64,7 @@ class RetroPadParser(PadParser):
               'Recap and Actions for Next Sprint',
               'Technical Parking Lot']
     TOPIC_RE = re.compile('(?P<topic>%s)' % '|'.join(TOPICS))
-    ENTRY_RE = re.compile('(?P<indent>\s*)\*\s*(?P<data>.+)', re.I | re.U)
+    ENTRY_RE = re.compile('(?P<indent>\s*)\[*-]\s*(?P<data>.+)', re.I | re.U)
 
     def parse(self):
         pad = self.get_pad(self.name, 'txt')

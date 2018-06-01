@@ -105,39 +105,39 @@ def prepare_templates(sprint_id):
 
 
 def publish(sprint_id, user):
-    # password = getpass.getpass('OTP password (Kerberos + PIN): ')
-    # publisher = mojo.MojoSFDFG(user, password)
-    # # review
-    # with codecs.open('/tmp/%s_review_blog_internal.html' % sprint_id,
-    #                  encoding="utf-8") as f:
-    #     post = mojo.Post(
-    #         subject="Sprint %s Review" % sprint_id,
-    #         content=f.read(),
-    #         categories=["Dailies and retrospectives"]
-    #     )
-    #     publisher.post_blog(post)
-    # # retro
-    # password = getpass.getpass('OTP password (Kerberos + PIN): ')
-    # publisher = mojo.MojoSFDFG(user, password)
-    # with codecs.open('/tmp/%s_retro_blog_internal.html' % sprint_id,
-    #                  encoding="utf-8") as f:
-    #     post = mojo.Post(
-    #         subject="Sprint %s Retrospective" % sprint_id,
-    #         content=f.read(),
-    #         categories=["Dailies and retrospectives"]
-    #     )
-    #     publisher.post_blog(post)
-    # # daily
-    # password = getpass.getpass('OTP password (Kerberos + PIN): ')
-    # publisher = mojo.MojoSFDFG(user, password)
-    # with codecs.open('/tmp/%s_daily_blog_internal.html' % sprint_id,
-    #                  encoding="utf-8") as f:
-    #     post = mojo.Post(
-    #         subject="Sprint %s Daily Minutes" % sprint_id,
-    #         content=f.read(),
-    #         categories=["Dailies and retrospectives"]
-    #     )
-    #     publisher.post_blog(post)
+    password = getpass.getpass('OTP password (Kerberos + PIN): ')
+    publisher = mojo.MojoSFDFG(user, password)
+    # review
+    with codecs.open('/tmp/%s_review_blog_internal.html' % sprint_id,
+                     encoding="utf-8") as f:
+        post = mojo.Post(
+            subject="Sprint %s Review" % sprint_id,
+            content=f.read(),
+            categories=["Dailies and retrospectives"]
+        )
+        publisher.post_blog(post)
+    # retro
+    password = getpass.getpass('OTP password (Kerberos + PIN): ')
+    publisher = mojo.MojoSFDFG(user, password)
+    with codecs.open('/tmp/%s_retro_blog_internal.html' % sprint_id,
+                     encoding="utf-8") as f:
+        post = mojo.Post(
+            subject="Sprint %s Retrospective" % sprint_id,
+            content=f.read(),
+            categories=["Dailies and retrospectives"]
+        )
+        publisher.post_blog(post)
+    # daily
+    password = getpass.getpass('OTP password (Kerberos + PIN): ')
+    publisher = mojo.MojoSFDFG(user, password)
+    with codecs.open('/tmp/%s_daily_blog_internal.html' % sprint_id,
+                     encoding="utf-8") as f:
+        post = mojo.Post(
+            subject="Sprint %s Daily Minutes" % sprint_id,
+            content=f.read(),
+            categories=["Dailies and retrospectives"]
+        )
+        publisher.post_blog(post)
     # TODO don't assume where the gmail secrets are
     G = gmail.GmailHelper('/tmp/gmail_secret.json')
     # os-status
