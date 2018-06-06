@@ -16,7 +16,31 @@ Randomizes attendees list and assigns each to a retrospective topic.
 
 ## tc3000.sh
 
-Runs pads2summaries.py interactively, publishes a review summary to www.softwarefactory-project.io
+TL;DR just run this script after the retrospective to automate most post
+ceremonies actions.
+
+### What it does
+
+* Fetch the retro, review and daily pads
+* Fill templates based on the pads contents. The templates are:
+
+  * Mojo blog article: Daily Minutes
+  * Mojo blog article: Retrospective
+  * Mojo blog article: Review
+  * review summary email to openstack-status mailing list
+  * review summary email to softwarefactory-dev mailing list (public elements)
+  * www.softwarefactory-project.io blog article: Review (public elements)
+
+* Wait for user corrections & validation
+* Push final drafts to Mojo, gmail, www.sf code review
+* Create a new sprint in taiga
+* Create impediments story in new sprint and related epic
+* Create Retro actions story and tasks in new sprint and related epic
+
+### What you need to do manually
+
+* Save the etherpads
+* Clean the etherpads for the next iteration
 
 ### Usage
 
@@ -24,7 +48,8 @@ Runs pads2summaries.py interactively, publishes a review summary to www.software
 
 ## pads2summaries.py
 
-Fetches our pads and prepares or publishes them to Mojo.
+Fetches our pads and prepares or publishes them to Mojo. Also creates a new
+sprint on taiga.
 
 ### Usage
 

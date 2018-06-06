@@ -2,7 +2,9 @@
 
 _SPRINT=$(date +%Y-%V)
 
-
+# TODO
+# - dry-run mode
+# - state save in case of failure for replayability
 
 interactive_args() {
     read -p "Please enter the sprint's name (default $_SPRINT): " SPRINT

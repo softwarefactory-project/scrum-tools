@@ -12,10 +12,11 @@ import codecs
 FILE_PATH = os.path.dirname(os.path.abspath(__file__))
 
 os.sys.path.append(FILE_PATH)
-from lib import etherpad, mojo, gmail
+from lib import etherpad, mojo, gmail, taiga # noqa
 
 
 TEMPLATE_DIR = FILE_PATH + "/templates/"
+
 
 def datetimeformat(value, format='%Y-%m-%d %H:%M'):
     return value.strftime(format)
@@ -148,6 +149,65 @@ def publish(sprint_id, user):
     with codecs.open('/tmp/%s_review_email_public.txt' % sprint_id,
                      encoding="utf-8") as f:
         G.send_message('me', f.read())
+    # taiga.io
+    retro_pad = etherpad.RetroPadParser('sfdfg-retro')
+    topics = retro_pad.parse()
+    msg = ("Enter SFbotO's password (can be found at "
+           "https://mojo.redhat.com/docs/DOC-1151042): ")
+    taiga_pwd = getpass.getpass(msg)
+    taiga_helper = taiga.TaigaHelper(taiga_pwd)
+    new_sprint_start = datetime.strptime(sprint_id + ' Thu', '%Y-%W %a')
+    new_sprint_end = new_sprint_start + timedelta(days=14)
+    new_sprint_id = new_sprint_end.strftime('%Y-%W')
+    # create sprint
+    taiga_sprint_id = taiga_helper.create_sprint(
+        new_sprint_id,
+        new_sprint_start,
+        new_sprint_end)
+    # create impediments US
+    impediments = taiga_helper.create_story_in_epic_and_sprint(
+        "Impediments and unplanned stuff",
+        "Sprint %s impediments and unexpected tasks" % new_sprint_id,
+        "Add anything unplanned here",
+        taiga_sprint_id)
+    # create retrospective actions US
+    retro_actions = taiga_helper.create_story_in_epic_and_sprint(
+        "Retrospective actions",
+        "Sprint %s Retrospective actions" % sprint_id,
+        "Actions agreed upon by the team after the sprint retrospective",
+        taiga_sprint_id)
+    tasks = []
+    # create recap tasks
+    if len(topics['Recap and Actions for Next Sprint']) > 0:
+        min_indent = min(entry['indent']
+                         for entry in
+                         topics['Recap and Actions for Next Sprint'])
+        for entry in topics['Recap and Actions for Next Sprint']:
+            if entry['indent'] == min_indent:
+                task = {'title': entry['data'],
+                        'description': ''}
+                tasks.append(task)
+            else:
+                task = tasks.pop()
+                tab = (entry['indent'] - min_indent) / 2 - 1
+                task['description'] += '\n' + tab * '\t' + entry['data']
+                tasks.append(task)
+    # create parking lot tasks
+    if len(topics['Technical Parking Lot']) > 0:
+        min_indent = min(entry['indent']
+                         for entry in topics['Technical Parking Lot'])
+        for entry in topics['Technical Parking Lot']:
+            if entry['indent'] == min_indent:
+                task = {'title': '[Parking Lot] ' + entry['data'],
+                        'description': ''}
+                tasks.append(task)
+            else:
+                task = tasks.pop()
+                tab = (entry['indent'] - min_indent) / 2 - 1
+                task['description'] += '\n' + tab * '\t' + entry['data']
+                tasks.append(task)
+    for task in tasks:
+        taiga_helper.add_task(us_id=retro_actions[0], **task)
 
 
 if __name__ == "__main__":
@@ -158,7 +218,7 @@ if __name__ == "__main__":
         if len(sys.argv) > 3:
             user = sys.argv[3]
         else:
-            user = raw_input("MOJO Username: ")
+            user = raw_input("Kerberos Username: ")
         publish(sprint_id, user)
     else:
         sys.exit('I can only "prepare" or "publish" !')
