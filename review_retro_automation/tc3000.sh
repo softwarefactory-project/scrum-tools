@@ -20,7 +20,7 @@ interactive_args() {
 interactive_args
 
 echo "Fetching pads ..."
-./pads2summaries.py 2018-22 prepare
+./pads2summaries.py $SPRINT prepare
 
 read -n 1 -s -r -p "You will now have a chance to edit files manually. Press any key to continue ..."
 $TXTEDITOR /tmp/${SPRINT}_daily_blog_internal.html /tmp/${SPRINT}_retro_blog_internal.html /tmp/${SPRINT}_review_blog_internal.html /tmp/${SPRINT}_review_blog_public.rst /tmp/${SPRINT}_review_email_public.txt /tmp/${SPRINT}_review_email_internal.txt
@@ -33,7 +33,7 @@ if [ -z "$USERNAME" ]; then
     USERNAME=$USER
 fi
 curl -u $USERNAME https://mojo.redhat.com/servlet/JiveServlet/downloadBody/1172175-102-1-2239214/google_TC_automation.json -o /tmp/gmail_secret.json
-./pads2summaries.py 2018-22 publish $USERNAME
+./pads2summaries.py $SPRINT publish $USERNAME
 rm /tmp/gmail_secret.json
 echo ""
 echo "Publishing to SF website ..."
